@@ -7,19 +7,21 @@ class Board extends Component {
     render() {
         let boardSize = this.props.boardSize;
         const board = [];
+        let boardStyle = {};
+
+        boardStyle["gridTemplateColumns"] = "repeat(" + boardSize.x + ", 25px)";
+        boardStyle["gridTemplateRows"] = "repeat(" + boardSize.y + ", 25px)";
+
         for(let y = 0; y < boardSize.y; y++) {
-            board.push(<Row key={y} id={y} rowWidth={boardSize.x}/>);
+            board[y] = [];
+            for(let x = 0; x < boardSize.x; x++) {
+                let id = "x:" + x + ",y:" + y;
+                board[y][x] = <Square key={id} id={id}/>;
+            }   
         }
 
-        // for(let y = 0; y < boardSize.y; y++) {
-        //     for(let x = 0; x < boardSize.x; x++) {
-        //         let id = "x:" + x + ",y:" + y;
-        //         board.push(<Square key={id} id={id}/>);
-        //     }   
-        // }
-
         return (
-           <div style={boardStyle}>
+           <div className="gameboard" style={boardStyle}>
                {board}
            </div>
         )
@@ -41,13 +43,8 @@ Board.propTypes = {
 Board.defaultProps = {
     boardSize: {
         x: 25,
-        y: 9
+        y: 10
     }
-}
-
-const boardStyle = {
-    display: 'flex',
-    flexDirection: 'column'
 }
 
 export default Board;

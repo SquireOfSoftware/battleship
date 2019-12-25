@@ -14,7 +14,6 @@ class Square extends React.Component {
 }
 
 Square.propTypes = {
-    // id: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
     displayShip: PropTypes.bool
 }

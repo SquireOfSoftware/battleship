@@ -1,19 +1,27 @@
 .default-square-element {
-    width: 20px;
-    height: 20px;
     background-color: rgb(53, 120, 221);
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-}
-
-.default-square-element:first-child {
-    border-left: 1px solid black;
-}
-
-.default-row-element:first-child > .default-square-element {
-    border-top: 1px solid black;
 }
 
 .default-row-element {
     display: flex
+}
+
+.title {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: greenyellow;
+    font-family: monospace;
+    font-size: 2em;
+    text-align: center;
+}
+
+.gameboard {
+    display: grid;
+    justify-content: center;
+    grid-gap: 1px;
+    padding-bottom: 30px;
+}
+
+html {
+    background: black
 }
