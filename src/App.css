@@ -1,5 +1,6 @@
 .default-square-element {
     background-color: rgb(53, 120, 221);
+    text-align: center;
 }
 
 .default-row-element {

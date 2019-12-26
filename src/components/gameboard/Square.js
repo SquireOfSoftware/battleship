@@ -3,19 +3,22 @@ import PropTypes from 'prop-types';
 
 class Square extends React.Component {
     render() {
-        let squareStyle = {};
-
+        let value = this.props.value;
         return (
             <div 
-                className="default-square-element" 
-                style={squareStyle}></div>
+                className="default-square-element"
+                onClick={() => this.props.processClick(this.props.coords)}
+            >
+                {value}
+            </div>
         )
     }
 }
 
 Square.propTypes = {
-    id: PropTypes.string.isRequired,
-    displayShip: PropTypes.bool
+    displayShip: PropTypes.bool,
+    processClick: PropTypes.func.isRequired,
+    coords: PropTypes.object
 }
 
 Square.defaultProps = {

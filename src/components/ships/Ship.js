@@ -10,11 +10,12 @@ class Ship extends React.Component {
 }
 
 Ship.propTypes = {
-    name: PropTypes.oneOf(Object.keys(type)),
-    type: PropTypes.oneOf(Object.keys(type))
+    name: PropTypes.oneOf(Object.keys(types)),
+    type: PropTypes.oneOf(Object.keys(types)),
+    coord: PropTypes.object
 }
 
-const type = {
+const types = {
     Carrier: {
         size: 5
     },
