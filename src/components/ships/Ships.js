@@ -1,18 +1,28 @@
 const Ships = {
     Carrier: {
-        size: 5
+        name: "Carrier",
+        size: 5,
+        symbol: "A"
     },
     Battleship: {
-        size: 4
+        name: "Battleship",
+        size: 4,
+        symbol: "B"
     },
     Cruiser: {
-        size: 3
+        name: "Cruiser",
+        size: 3,
+        symbol: "C"
     },
     Submarine: {
-        size: 3
+        name: "Submarine",
+        size: 3,
+        symbol: "S"
     },
     Destroyer: {
-        size: 2
+        name: "Destroyer",
+        size: 2,
+        symbol: "D"
     }
 }
 

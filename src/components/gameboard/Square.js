@@ -16,13 +16,8 @@ class Square extends React.Component {
 }
 
 Square.propTypes = {
-    displayShip: PropTypes.bool,
     processClick: PropTypes.func.isRequired,
     coords: PropTypes.object
-}
-
-Square.defaultProps = {
-    displayShip: false
 }
 
 export default Square;
