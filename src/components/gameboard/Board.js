@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Square from './Square.js';
 import Ships from '../ships/Ships.js';
-// import Ship from '../ships/Ship.js';
 import PropTypes from 'prop-types';
+import BoardType from './BoardType.js';
 
 class Board extends Component {
     constructor(props) {
         super(props);
+
+        console.log(props);
 
         this.state = {
             clickedSquares: []
@@ -15,15 +17,14 @@ class Board extends Component {
 
     handleClick = (e) => {
         let clickedSquares = this.state.clickedSquares;
-        // console.log(clickedSquares);
         clickedSquares.push(e);
         this.setState({
             clickedSquares
-        })
+        });
+        this.props.getNextTurn(this.props.boardType);
     }
 
     existsInClickedSquares = (coord) => {
-        // return this.state.clickedSquares[coord.x, coord.y] !== undefined;
         return this.state.clickedSquares.filter(
             square => square.x === coord.x &&
                 square.y === coord.y)
@@ -79,8 +80,11 @@ class Board extends Component {
         }
 
         return (
-           <div className="gameboard" style={boardStyle}>
-               {board}
+           <div>
+               <div className='title'>{this.props.boardType} board</div>
+               <div className="gameboard" style={boardStyle}>
+                   {board}
+               </div>
            </div>
         )
     }
@@ -111,7 +115,9 @@ Board.defaultProps = {
                 {x: 0, y: 1},
             ]
         }
-    ]
+    ],
+    boardType: BoardType.Player
 }
+
 
 export default Board;

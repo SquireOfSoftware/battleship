@@ -23,6 +23,12 @@
     padding-bottom: 30px;
 }
 
+.turn-order {
+    background-color: yellow;
+    text-align: center;
+    font-family: monospace;
+}
+
 html {
     background: black
 }
