@@ -16,12 +16,21 @@ class Board extends Component {
     }
 
     handleClick = (e) => {
+        if (this.props.isClickable &&
+            this.props.canAttack(this.props.boardType)) {
+            this.processAttack(e);
+        }
+    }
+
+    processAttack = (square) => {
         let clickedSquares = this.state.clickedSquares;
-        clickedSquares.push(e);
-        this.setState({
-            clickedSquares
-        });
-        this.props.getNextTurn(this.props.boardType);
+        if (!this.existsInClickedSquares(square)) {
+            clickedSquares.push(square);
+            this.setState({
+                clickedSquares
+            });
+            this.props.endTurn(this.props.boardType);
+        }
     }
 
     existsInClickedSquares = (coord) => {
@@ -116,7 +125,8 @@ Board.defaultProps = {
             ]
         }
     ],
-    boardType: BoardType.Player
+    boardType: BoardType.Player,
+    isClickable: false
 }
 
 
