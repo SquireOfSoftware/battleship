@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Board from '../gameboard/Board.js';
+import AttackBoard from '../gameboard/AttackBoard.js';
 import BoardType from '../gameboard/BoardType.js';
 
-class Game extends Component {
+class WarRoom extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,12 +49,12 @@ class Game extends Component {
   }
 
   render() {
-    let enemyBoard = <Board boardType={BoardType.Enemy}
+    let enemyBoard = <AttackBoard boardType={BoardType.Enemy}
                             endTurn={this.endTurn}
                             canAttack={this.canAttack}
                             isClickable='true'
                      />
-    let playerBoard = <Board boardType={BoardType.Player}
+    let playerBoard = <AttackBoard boardType={BoardType.Player}
                             endTurn={this.endTurn}
                             canAttack={this.canAttack}
                             isClickable='true'
@@ -70,4 +70,4 @@ class Game extends Component {
   }
 }
 
-export default Game;
+export default WarRoom;

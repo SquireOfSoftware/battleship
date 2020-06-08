@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Square from './Square.js';
+import Grid from './Grid.js';
 import Ships from '../ships/Ships.js';
 import PropTypes from 'prop-types';
 import BoardType from './BoardType.js';
 
-class Board extends Component {
+class AttackBoard extends Component {
     constructor(props) {
         super(props);
 
@@ -60,51 +60,24 @@ class Board extends Component {
     }
 
     render() {
-        let boardSize = this.props.boardSize;
-        const board = [];
-        let boardStyle = {};
-
-        boardStyle["gridTemplateColumns"] = "repeat(" + boardSize.x + ", 25px)";
-        boardStyle["gridTemplateRows"] = "repeat(" + boardSize.y + ", 25px)";
-
-        for(let y = 0; y < boardSize.y; y++) {
-            board[y] = [];
-            for(let x = 0; x < boardSize.x; x++) {
-                let id = "x:" + x + ",y:" + y;
-                let coords = {
-                    x,
-                    y
-                };
-
-                let value = this.getValue(coords);
-
-                board[y][x] = <Square 
-                    key={id}
-                    id={id}
-                    coords={coords} 
-                    value={value}
-                    processClick={this.handleClick}
-            />;
-            }   
-        }
-
         return (
            <div>
                <div className='title'>{this.props.boardType} board</div>
-               <div className="gameboard" style={boardStyle}>
-                   {board}
-               </div>
+               <Grid handleClick={this.handleClick}
+                     boardSize={this.props.boardSize}
+                     getValue={this.getValue}
+               />
            </div>
         )
     }
 }
 
-Board.propTypes = {
+AttackBoard.propTypes = {
     boardSize: PropTypes.object.isRequired,
     ships: PropTypes.array
 }
 
-Board.defaultProps = {
+AttackBoard.defaultProps = {
     boardSize: {
         x: 25,
         y: 10
@@ -130,4 +103,4 @@ Board.defaultProps = {
 }
 
 
-export default Board;
+export default AttackBoard;
