@@ -27,6 +27,7 @@ class Grid extends Component {
                     coords={coords}
                     value={value}
                     processClick={this.props.handleClick}
+                    processDrop={this.props.handleDrop}
             />;
             }
         }

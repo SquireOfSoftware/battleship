@@ -44,6 +44,7 @@ class DeploymentCounter extends Component {
                 <label htmlFor={this.id}>
                        {this.name} squares left to place: {this.counter}
                 </label>
+                <img src={this.reference.img}  />
             </div>
         )
     }

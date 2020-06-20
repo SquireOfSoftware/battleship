@@ -38,6 +38,10 @@ class SetupBoard extends Component {
         });
     }
 
+    handleMouseDrop = (event) => {
+        console.log(event);
+    }
+
     render() {
         let shipArray = [
             Ships.Carrier,
@@ -69,6 +73,7 @@ class SetupBoard extends Component {
                 <Grid handleClick={this.handleGridClick}
                       boardSize={this.props.boardSize}
                       getValue={this.getValue}
+                      handleDrop={this.handleMouseDrop}
                 />
                 <div>
                     {radioButtons}
