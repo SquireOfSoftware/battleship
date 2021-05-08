@@ -3,48 +3,42 @@ import Grid from './Grid.js';
 import Ships from '../ships/Ships.js';
 import DeploymentCounter from './DeploymentCounter.js'
 
+import { connect } from 'react-redux'
+import { addShip } from '../../actions/setupActions'
+import initialState from '../../reducers/initialState'
+
 class SetupBoard extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            shipPlacements: [],
-            selectedShipType: undefined,
-            squaresLeft: 0,
-            clickedSquares: []
-        };
-    }
-
-    handleGridClick = (e) => {
-        if (this.canClickGrid()) {
-
-        }
-    }
-
     getValue = (coords) => {
-
+      if (this.isAnObstacle(coords)) {
+        return '-';
+      } else {
+        return 'X';
+      }
     }
 
-    canClickGrid = () => {
-        return this.state.selectedShipType !== undefined &&
-            this.state.squaresLeft > 0 &&
-            this.state.squaresLeft <= this.state.selectedShipType;
-    }
-
-    handleRadioSelection = (shipType, squaresLeft) => {
-        console.log(shipType);
-        this.setState({
-            selectedShipType: shipType,
-            squaresLeft: squaresLeft
-        });
+    isAnObstacle = (coords) => {
+      if (initialState.obstacles !== undefined){
+        return initialState.obstacles.find(obstacle => {
+          return coords.x === obstacle.x && coords.y === obstacle.y
+        }) !== undefined;
+      }
+      return false;
     }
 
     handleMouseDrop = (event) => {
-        let shipImg = JSON.parse(event.dataTransfer.getData("shipReference"));
-        console.log(shipImg);
-        console.log(event.clientX + "," + event.clientY);
+        let shipReference = JSON.parse(event.dataTransfer.getData("shipReference"));
+        shipReference.dragEndCoords = {
+          x: event.clientX,
+          y: event.clientY
+        };
 
         // figure out which square this is
         // place the ship around it
+        this.props.addShip(shipReference);
+    }
+
+    handleGridClick = (event) => {
+      console.log(event);
     }
 
     render() {
@@ -64,7 +58,6 @@ class SetupBoard extends Component {
                                         id={index}
                                         reference={shipReference}
                                         link="setupBoard"
-                                        handleRadioSelection={this.handleRadioSelection}
                                   />
                 radioButtons.push(radioButton);
             }
@@ -76,7 +69,6 @@ class SetupBoard extends Component {
                     Deploy your ships for naval warfare
                 </div>
                 <Grid handleClick={this.handleGridClick}
-                      boardSize={this.props.boardSize}
                       getValue={this.getValue}
                       handleDrop={this.handleMouseDrop}
                 />
@@ -91,11 +83,8 @@ class SetupBoard extends Component {
     }
 }
 
-SetupBoard.defaultProps = {
-              boardSize: {
-                  x: 25,
-                  y: 10
-              }
-          }
+const mapStateToProps = state => ({
+  ships: state.ships
+})
 
-export default SetupBoard;
+export default connect(mapStateToProps, {addShip})(SetupBoard);

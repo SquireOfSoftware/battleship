@@ -31,14 +31,8 @@ class DeploymentCounter extends Component {
         }
     }
 
-    handleRadioSelection = (e) => {
-        this.props.handleRadioSelection(this.reference, this.counter);
-    }
-
     startDataTransfer = (e) => {
         let sourceElement = e.currentTarget;
-        console.log("mouse position");
-        console.log({x: e.clientX, y: e.clientY});
         let x, y = 0;
         if (sourceElement.offsetWidth > sourceElement.offsetHeight) {
             y = 1;
@@ -75,7 +69,8 @@ class DeploymentCounter extends Component {
                 <label>{this.name}</label>
                 <img src={this.reference.img}
                      onDragStart={this.startDataTransfer}
-                     onDragEnd={this.endDataTransfer}/>
+                     onDragEnd={this.endDataTransfer}
+                     alt={this.name}/>
             </div>
         )
     }

@@ -1,16 +1,18 @@
 import React from 'react';
 import './App.css';
-import WarRoom from './components/gamemaster/WarRoom.js';
-import DeploymentRoom from './components/gamemaster/DeploymentRoom.js';
+import SetupBoard from './components/gameboard/SetupBoard.js';
+import {Provider} from 'react-redux'
+import store from './store.js'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-      <DeploymentRoom />
-      <WarRoom />
-      </header>
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <header className="App-header">
+          <SetupBoard />
+        </header>
+      </div>
+    </Provider>
   )
 }
 

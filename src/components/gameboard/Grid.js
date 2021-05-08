@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Square from './Square.js';
 
+import initialState from '../../reducers/initialState'
+
 class Grid extends Component {
     render() {
-        let boardSize = this.props.boardSize;
+        let boardSize = initialState.boardSize;
         const board = [];
         let boardStyle = {};
 
