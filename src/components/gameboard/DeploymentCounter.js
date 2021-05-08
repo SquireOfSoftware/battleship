@@ -11,6 +11,8 @@ class DeploymentCounter extends Component {
         this.name = this.reference.name;
         this.value = this.reference.symbol;
         this.counter = this.reference.size;
+
+        this.isRotated = false;
     }
 
     decrementCount = (event) => {
@@ -33,18 +35,47 @@ class DeploymentCounter extends Component {
         this.props.handleRadioSelection(this.reference, this.counter);
     }
 
+    startDataTransfer = (e) => {
+        let sourceElement = e.currentTarget;
+        console.log("mouse position");
+        console.log({x: e.clientX, y: e.clientY});
+        let x, y = 0;
+        if (sourceElement.offsetWidth > sourceElement.offsetHeight) {
+            y = 1;
+            x = Math.ceil((e.clientX - sourceElement.offsetLeft) / 25);
+            console.log("mouse x: " + e.clientX +
+            " img width: " + sourceElement.offsetWidth +
+            " img offset: " + sourceElement.offsetLeft +
+            " " + (e.clientX - sourceElement.offsetLeft) / 25);
+        } else {
+            x = 1;
+            y = Math.floor((e.clientY - sourceElement.offsetTop) / 25);
+        }
+        console.log(x + ", " + y);
+
+        let imgObject = {
+            reference: this.reference,
+            rotation: 90,
+            dragStartCoords: {
+                x: x,
+                y: y
+            }
+        };
+        e.target.style.opacity = 0.4;
+        e.dataTransfer.setData("shipReference", JSON.stringify(imgObject));
+    }
+
+    endDataTransfer = (e) => {
+        e.target.style.opacity = 1;
+    }
+
     render() {
         return (
             <div className="ship-checkbox">
-                <input type='radio'
-                       id={this.id}
-                       name={this.link}
-                       value={this.value}
-                       onClick={this.handleRadioSelection}/>
-                <label htmlFor={this.id}>
-                       {this.name} squares left to place: {this.counter}
-                </label>
-                <img src={this.reference.img}  />
+                <label>{this.name}</label>
+                <img src={this.reference.img}
+                     onDragStart={this.startDataTransfer}
+                     onDragEnd={this.endDataTransfer}/>
             </div>
         )
     }

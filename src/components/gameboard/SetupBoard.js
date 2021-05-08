@@ -39,7 +39,12 @@ class SetupBoard extends Component {
     }
 
     handleMouseDrop = (event) => {
-        console.log(event);
+        let shipImg = JSON.parse(event.dataTransfer.getData("shipReference"));
+        console.log(shipImg);
+        console.log(event.clientX + "," + event.clientY);
+
+        // figure out which square this is
+        // place the ship around it
     }
 
     render() {

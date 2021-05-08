@@ -9,7 +9,6 @@ class Square extends React.Component {
                 className="default-square-element"
                 onClick={() => this.props.processClick(this.props.coords)}
                 onDrop={(event) => {
-                        console.log("drop event");
                         console.log(event);
                         this.props.processDrop(event);
                         event.stopPropagation();
@@ -17,7 +16,6 @@ class Square extends React.Component {
                     }
                 }
                 onDragOver={(event) => {
-                    console.log("drag over event");
                     event.stopPropagation();
                     event.preventDefault();
                 }}
