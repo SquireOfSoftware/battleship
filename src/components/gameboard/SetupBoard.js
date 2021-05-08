@@ -4,16 +4,25 @@ import Ships from '../ships/Ships.js';
 import DeploymentCounter from './DeploymentCounter.js'
 
 import { connect } from 'react-redux'
-import { addShip, setupBoardSize } from '../../actions/setupActions'
+import { addShip } from '../../actions/setupActions'
+import initialState from '../../reducers/initialState'
 
 class SetupBoard extends Component {
-    constructor(props) {
-        super(props);
-        this.props.setupBoardSize(props.boardSize);
+    getValue = (coords) => {
+      if (this.isAnObstacle(coords)) {
+        return '-';
+      } else {
+        return 'X';
+      }
     }
 
-    getValue = (coords) => {
-      return 'X';
+    isAnObstacle = (coords) => {
+      if (initialState.obstacles !== undefined){
+        return initialState.obstacles.find(obstacle => {
+          return coords.x === obstacle.x && coords.y === obstacle.y
+        }) !== undefined;
+      }
+      return false;
     }
 
     handleMouseDrop = (event) => {
@@ -60,7 +69,6 @@ class SetupBoard extends Component {
                     Deploy your ships for naval warfare
                 </div>
                 <Grid handleClick={this.handleGridClick}
-                      boardSize={this.props.boardSize}
                       getValue={this.getValue}
                       handleDrop={this.handleMouseDrop}
                 />
@@ -75,16 +83,8 @@ class SetupBoard extends Component {
     }
 }
 
-SetupBoard.defaultProps = {
-              boardSize: {
-                  x: 25,
-                  y: 10
-              }
-          }
-
 const mapStateToProps = state => ({
-  ships: state.ships,
-  boardSize: state.boardSize
+  ships: state.ships
 })
 
-export default connect(mapStateToProps, {addShip, setupBoardSize})(SetupBoard);
+export default connect(mapStateToProps, {addShip})(SetupBoard);

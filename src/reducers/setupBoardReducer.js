@@ -1,15 +1,7 @@
-import { ADD_SHIP, ADD_OBSTACLES, SETUP_BOARD_SIZE } from '../actions/setupActions'
+import { ADD_SHIP } from '../actions/setupActions'
+import initialState from './initialState'
 
-const initialState = {
-  ships: [],
-  boardSize: {
-    x: 1,
-    y: 1
-  },
-  obstacles: []
-}
-
-export default (state = initialState, action) => {
+const setupBoardReducer = (state = initialState, action) => {
   switch(action.type) {
     case ADD_SHIP:
       console.log(action.payload);
@@ -19,17 +11,9 @@ export default (state = initialState, action) => {
         ...state,
         ships
       }
-    case SETUP_BOARD_SIZE:
-      return {
-        ...state,
-        boardSize: action.payload
-      }
-    case ADD_OBSTACLES:
-      return {
-        ...state,
-        obstacles: action.payload
-      }
     default:
       return state;
   }
 }
+
+export default setupBoardReducer;

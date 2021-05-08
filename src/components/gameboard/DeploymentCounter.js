@@ -69,7 +69,8 @@ class DeploymentCounter extends Component {
                 <label>{this.name}</label>
                 <img src={this.reference.img}
                      onDragStart={this.startDataTransfer}
-                     onDragEnd={this.endDataTransfer}/>
+                     onDragEnd={this.endDataTransfer}
+                     alt={this.name}/>
             </div>
         )
     }
