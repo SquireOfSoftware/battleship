@@ -31,10 +31,6 @@ class DeploymentCounter extends Component {
         }
     }
 
-    handleRadioSelection = (e) => {
-        this.props.handleRadioSelection(this.reference, this.counter);
-    }
-
     startDataTransfer = (e) => {
         let sourceElement = e.currentTarget;
         console.log("mouse position");

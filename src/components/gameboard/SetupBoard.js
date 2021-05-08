@@ -3,48 +3,30 @@ import Grid from './Grid.js';
 import Ships from '../ships/Ships.js';
 import DeploymentCounter from './DeploymentCounter.js'
 
+import { connect } from 'react-redux'
+import { addShip } from '../../actions/setupActions'
+
 class SetupBoard extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            shipPlacements: [],
-            selectedShipType: undefined,
-            squaresLeft: 0,
-            clickedSquares: []
-        };
-    }
-
-    handleGridClick = (e) => {
-        if (this.canClickGrid()) {
-
-        }
     }
 
     getValue = (coords) => {
 
     }
 
-    canClickGrid = () => {
-        return this.state.selectedShipType !== undefined &&
-            this.state.squaresLeft > 0 &&
-            this.state.squaresLeft <= this.state.selectedShipType;
-    }
-
-    handleRadioSelection = (shipType, squaresLeft) => {
-        console.log(shipType);
-        this.setState({
-            selectedShipType: shipType,
-            squaresLeft: squaresLeft
-        });
-    }
-
     handleMouseDrop = (event) => {
-        let shipImg = JSON.parse(event.dataTransfer.getData("shipReference"));
-        console.log(shipImg);
+        let shipReference = JSON.parse(event.dataTransfer.getData("shipReference"));
+        console.log(shipReference);
         console.log(event.clientX + "," + event.clientY);
+        shipReference.dragEndCoords = {
+          x: event.clientX,
+          y: event.clientY
+        };
 
         // figure out which square this is
         // place the ship around it
+        this.props.addShip(shipReference);
     }
 
     render() {
@@ -64,7 +46,6 @@ class SetupBoard extends Component {
                                         id={index}
                                         reference={shipReference}
                                         link="setupBoard"
-                                        handleRadioSelection={this.handleRadioSelection}
                                   />
                 radioButtons.push(radioButton);
             }
@@ -98,4 +79,8 @@ SetupBoard.defaultProps = {
               }
           }
 
-export default SetupBoard;
+const mapStateToProps = state => ({
+  ships: state.ships
+})
+
+export default connect(mapStateToProps, {addShip})(SetupBoard);
