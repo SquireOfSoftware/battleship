@@ -33,8 +33,6 @@ class DeploymentCounter extends Component {
 
     startDataTransfer = (e) => {
         let sourceElement = e.currentTarget;
-        console.log("mouse position");
-        console.log({x: e.clientX, y: e.clientY});
         let x, y = 0;
         if (sourceElement.offsetWidth > sourceElement.offsetHeight) {
             y = 1;

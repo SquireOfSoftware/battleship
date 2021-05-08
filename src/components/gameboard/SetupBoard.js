@@ -4,21 +4,20 @@ import Ships from '../ships/Ships.js';
 import DeploymentCounter from './DeploymentCounter.js'
 
 import { connect } from 'react-redux'
-import { addShip } from '../../actions/setupActions'
+import { addShip, setupBoardSize } from '../../actions/setupActions'
 
 class SetupBoard extends Component {
     constructor(props) {
         super(props);
+        this.props.setupBoardSize(props.boardSize);
     }
 
     getValue = (coords) => {
-
+      return 'X';
     }
 
     handleMouseDrop = (event) => {
         let shipReference = JSON.parse(event.dataTransfer.getData("shipReference"));
-        console.log(shipReference);
-        console.log(event.clientX + "," + event.clientY);
         shipReference.dragEndCoords = {
           x: event.clientX,
           y: event.clientY
@@ -27,6 +26,10 @@ class SetupBoard extends Component {
         // figure out which square this is
         // place the ship around it
         this.props.addShip(shipReference);
+    }
+
+    handleGridClick = (event) => {
+      console.log(event);
     }
 
     render() {
@@ -80,7 +83,8 @@ SetupBoard.defaultProps = {
           }
 
 const mapStateToProps = state => ({
-  ships: state.ships
+  ships: state.ships,
+  boardSize: state.boardSize
 })
 
-export default connect(mapStateToProps, {addShip})(SetupBoard);
+export default connect(mapStateToProps, {addShip, setupBoardSize})(SetupBoard);
