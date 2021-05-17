@@ -1,12 +1,10 @@
 import React from 'react';
-import Square from './Square.js';
+import Square from './Square';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { addShip } from '../../actions/setupActions'
 
 const Grid = () => {
-  const ships = useSelector(state => state.setupBoard.ships);
-  const obstacles = useSelector(state => state.setupBoard.obstacles);
   const boardSize = useSelector(state => state.setupBoard.boardSize);
   const board = [];
   let boardStyle = {};
@@ -31,33 +29,6 @@ const Grid = () => {
     dispatch(addShip(shipReference));
   }
 
-  let getValue = (coords) => {
-    if (isAnObstacle(coords, obstacles)) {
-      return '-';
-    } else if (isAShip(coords, ships)) {
-      return 'S';
-    } else {
-      return 'O';
-    }
-  }
-
-  const isAnObstacle = (coords, obstacles) => {
-    if (obstacles !== undefined){
-      return obstacles.find(obstacle => {
-        return coords.x === obstacle.x && coords.y === obstacle.y
-      }) !== undefined;
-    }
-    return false;
-  }
-
-  const isAShip = (coords, ships) => {
-    if (ships !== undefined) {
-      return ships.find(ship => {
-        return coords.x === ship.x && coords.y === ship.y
-      }) !== undefined;
-    }
-  }
-
   for(let y = 0; y < boardSize.y; y++) {
       board[y] = [];
       for(let x = 0; x < boardSize.x; x++) {
@@ -67,20 +38,10 @@ const Grid = () => {
               y
           };
 
-          let value;
-          if (isAnObstacle(coords, obstacles)) {
-            value = '-';
-          } else if (isAShip(coords, ships)) {
-            value = 'S';
-          } else {
-            value = 'O';
-          }
-
           board[y][x] = <Square
               key={id}
               id={id}
               coords={coords}
-              value={value}
               processClick={() => handleGridClick()}
               processDrop={event => handleMouseDrop(event)}
       />;
