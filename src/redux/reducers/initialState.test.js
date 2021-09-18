@@ -259,4 +259,147 @@ describe("split board tests", () => {
       }
     );
   });
+
+  describe("middle placement tests", () => {
+    each([
+      [
+        "ship in the middle of a 4 x 4 board",
+        {
+          startX: 0,
+          startY: 0,
+          endX: 3,
+          endY: 3,
+        },
+        { startX: 1, endX: 2, startY: 1, endY: 1 },
+        [
+          {
+            startX: 0,
+            startY: 0,
+            endX: 3,
+            endY: 0,
+          },
+          {
+            startX: 0,
+            startY: 1,
+            endX: 0,
+            endY: 1,
+          },
+          {
+            startX: 3,
+            startY: 1,
+            endX: 3,
+            endY: 1,
+          },
+          {
+            startX: 0,
+            startY: 2,
+            endX: 3,
+            endY: 3,
+          },
+        ],
+      ],
+      [
+        "horizontal ship in the middle of a 6 x 6 board",
+        {
+          startX: 0,
+          startY: 0,
+          endX: 5,
+          endY: 5,
+        },
+        { startX: 3, endX: 4, startY: 3, endY: 3 },
+        [
+          {
+            startX: 0,
+            startY: 0,
+            endX: 5,
+            endY: 2,
+          },
+          {
+            startX: 0,
+            startY: 3,
+            endX: 2,
+            endY: 3,
+          },
+          {
+            startX: 5,
+            startY: 3,
+            endX: 5,
+            endY: 3,
+          },
+          {
+            startX: 0,
+            startY: 4,
+            endX: 5,
+            endY: 5,
+          },
+        ],
+      ],
+      [
+        "vertical ship in the middle of a 6 x 6 board",
+        {
+          startX: 0,
+          startY: 0,
+          endX: 5,
+          endY: 5,
+        },
+        { startX: 3, endX: 3, startY: 3, endY: 4 },
+        [
+          {
+            startX: 0,
+            startY: 0,
+            endX: 5,
+            endY: 2,
+          },
+          {
+            startX: 0,
+            startY: 3,
+            endX: 2,
+            endY: 4,
+          },
+          {
+            startX: 4,
+            startY: 3,
+            endX: 5,
+            endY: 4,
+          },
+          {
+            startX: 0,
+            startY: 5,
+            endX: 5,
+            endY: 5,
+          },
+        ],
+      ],
+      [
+        "vertical ship on edge of a 6 x 6 board",
+        {
+          startX: 0,
+          startY: 0,
+          endX: 5,
+          endY: 5,
+        },
+        { startX: 5, startY: 2, endX: 5, endY: 5 },
+        [
+          {
+            startX: 0,
+            startY: 0,
+            endX: 5,
+            endY: 1,
+          },
+          {
+            startX: 0,
+            startY: 2,
+            endX: 4,
+            endY: 5,
+          },
+        ],
+      ],
+    ]).it(
+      "{case: %s, board: %s, ship: %s, expected boards: %s}",
+      (_, board, ship, expectedBoards) => {
+        const boards = splitBoard(board, ship);
+        expect(boards).toEqual(expectedBoards);
+      }
+    );
+  });
 });

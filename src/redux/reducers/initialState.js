@@ -48,7 +48,7 @@ function splitBoard(board, ship) {
     ship.startX < board.startX ||
     ship.endX < board.startX ||
     ship.endX > board.endX ||
-    ship.startY > board.startY ||
+    ship.startY > board.endY ||
     ship.startY < board.startY ||
     ship.endY < board.startY ||
     ship.endY > board.endY
@@ -57,7 +57,6 @@ function splitBoard(board, ship) {
   }
 
   // after the validity check above, we always assume that the ship can fit inside
-
   const topDiff = ship.startY;
   const bottomDiff = board.endY - ship.endY;
   const leftDiff = ship.startX;
@@ -70,7 +69,8 @@ function splitBoard(board, ship) {
       startX: board.startX,
       endX: board.endX,
       startY: board.startY,
-      endY: topDiff,
+      endY: topDiff - 1,
+      // type: "top"
     };
     splitBoards.push(newBoard);
   }
@@ -81,6 +81,7 @@ function splitBoard(board, ship) {
       endX: leftDiff - 1,
       startY: ship.startY,
       endY: ship.endY,
+      // type: "left"
     };
     splitBoards.push(newBoard);
   }
@@ -91,6 +92,7 @@ function splitBoard(board, ship) {
       endX: board.endX,
       startY: ship.startY,
       endY: ship.endY,
+      // type: "right"
     };
     splitBoards.push(newBoard);
   }
@@ -99,8 +101,9 @@ function splitBoard(board, ship) {
     const newBoard = {
       startX: board.startX,
       endX: board.endX,
-      startY: bottomDiff,
+      startY: ship.endY + 1,
       endY: board.endY,
+      // type: "bottom"
     };
     splitBoards.push(newBoard);
   }
@@ -111,7 +114,7 @@ function splitBoard(board, ship) {
 // from https://stackoverflow.com/questions/4373741/how-can-i-randomly-place-several-non-colliding-rects
 function placeAndSplitBoard(initialBoard, shipToPlace) {
   // assuming a board of some size x and y, we will place the ship randomly in the board meeting its conditions
-  // a board starts from a, b at the top left, to x - 1, y - 1 in the bottom right
+  // a board starts from a, b at the top left, to x, y in the bottom right
   // a board has a schema of {startX, startY, endX, endY}
   // we are also assuming the ship has a given length of a width of 1
   // once we place the ship, we will split the board up into free squares and return that as the output
