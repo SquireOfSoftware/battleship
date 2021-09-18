@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 const Square = (props) => {
   const ships = useSelector(state => state.setupBoard.ships);
   const obstacles = useSelector(state => state.setupBoard.obstacles);
+  const value = useSelector(state => state.setupBoard.board[props.coords.x][props.coords.y].id)
 
   let getValue = (coords) => {
     if (isAnObstacle(coords, obstacles)) {
@@ -47,7 +48,7 @@ const Square = (props) => {
               event.preventDefault();
           }}
       >
-          {getValue(props.coords)}
+          {value}
       </div>
   )
 }
