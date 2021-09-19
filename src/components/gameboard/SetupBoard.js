@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from './Grid.js';
-import Ships from '../ships/Ships.js';
+import {Ships} from '../ShipTypes';
 import DeploymentCounter from './DeploymentCounter.js'
 
 const SetupBoard = () => {
