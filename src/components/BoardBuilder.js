@@ -202,7 +202,11 @@ function generateShipPlacements(initialBoard, shipsToBeCreated) {
       try {
         ship.orientation = generateShipOrientation(boards[i], ship);
       } catch (error) {
-        throw `there was no good placement for this ship ${ship}, here is the board state thus far, boards: ${boards}, createdShips: ${createdShips}`;
+        throw `there was no good placement for this ship ${JSON.stringify(
+          ship
+        )}, here is the board state thus far, boards: ${JSON.stringify(
+          boards
+        )}, createdShips: ${JSON.stringify(createdShips)}`;
       }
       const placements = placeAndSplitBoard(boards[i], ship);
       if (placements.splitBoards.length === 0) {
