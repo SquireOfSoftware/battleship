@@ -5,8 +5,10 @@ import {
   splitBoard,
   placeAndSplitBoard,
   generateShipOrientation,
+  placeShipOnBoard,
 } from "./BoardBuilder";
 import { SHIP_ORIENTATION } from "./ShipTypes";
+import { SQUARE_TYPES } from "./SquareTypes";
 
 describe("random 1d generation tests", () => {
   each([
@@ -965,5 +967,106 @@ describe("ship placement tests", () => {
         mathSpy.mockRestore();
       }
     );
+  });
+});
+
+describe("placing a ship on a board", () => {
+  each([
+    [
+      [[SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id]],
+      {
+        size: 2,
+        startX: 0,
+        startY: 0,
+        endX: 1,
+        endY: 0,
+        orientation: SHIP_ORIENTATION.HORIZONTAL,
+        symbol: "S",
+        name: "ship",
+      },
+      [["S", "S"]],
+    ],
+    [
+      [[SQUARE_TYPES.FREE.id], [SQUARE_TYPES.FREE.id]],
+      {
+        size: 2,
+        startX: 0,
+        startY: 0,
+        endX: 0,
+        endY: 1,
+        orientation: SHIP_ORIENTATION.VERTICAL,
+        symbol: "S",
+        name: "ship",
+      },
+      [["S"], ["S"]],
+    ],
+    [
+      [
+        [
+          SQUARE_TYPES.FREE.id,
+          SQUARE_TYPES.FREE.id,
+          SQUARE_TYPES.FREE.id,
+          SQUARE_TYPES.FREE.id,
+        ],
+      ],
+      {
+        size: 2,
+        startX: 1,
+        startY: 0,
+        endX: 2,
+        endY: 0,
+        orientation: SHIP_ORIENTATION.HORIZONTAL,
+        symbol: "S",
+        name: "ship",
+      },
+      [[SQUARE_TYPES.FREE.id, "S", "S", SQUARE_TYPES.FREE.id]],
+    ],
+    [
+      [
+        [SQUARE_TYPES.FREE.id],
+        [SQUARE_TYPES.FREE.id],
+        [SQUARE_TYPES.FREE.id],
+        [SQUARE_TYPES.FREE.id],
+      ],
+      {
+        size: 2,
+        startX: 0,
+        startY: 1,
+        endX: 0,
+        endY: 2,
+        orientation: SHIP_ORIENTATION.VERTICAL,
+        symbol: "S",
+        name: "ship",
+      },
+      [[SQUARE_TYPES.FREE.id], ["S"], ["S"], [SQUARE_TYPES.FREE.id]],
+    ],
+    [
+      [
+        [SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id],
+        [SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id],
+        [SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id],
+        [SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id],
+      ],
+      {
+        size: 2,
+        startX: 1,
+        startY: 1,
+        endX: 1,
+        endY: 2,
+        orientation: SHIP_ORIENTATION.VERTICAL,
+        symbol: "S",
+        name: "ship",
+      },
+      [
+        [SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id],
+        [SQUARE_TYPES.FREE.id, "S", SQUARE_TYPES.FREE.id],
+        [SQUARE_TYPES.FREE.id, "S", SQUARE_TYPES.FREE.id],
+        [SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id, SQUARE_TYPES.FREE.id],
+      ],
+    ],
+  ]).it("horizontal placement test", (board, ship, expectedBoard) => {
+    const newBoard = placeShipOnBoard(board, ship);
+    // console.log(newBoard);
+    expect(newBoard).toEqual(expectedBoard);
   });
 });

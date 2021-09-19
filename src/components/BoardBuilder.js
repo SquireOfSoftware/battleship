@@ -1,4 +1,4 @@
-import { SQUARE_TYPES } from "./SquareTypes";
+import { SQUARE_TYPES, generateShipSquare } from "./SquareTypes";
 import { Ships, SHIP_ORIENTATION } from "./ShipTypes";
 
 // from MDN
@@ -124,6 +124,7 @@ function generateShipOrientation(initialBoard, shipToPlace) {
   }
 
   if (orientation === undefined) {
+    debugger;
     throw "We cannot fit the ship on this board";
   }
   return {
@@ -200,7 +201,7 @@ function generateShipPlacements(initialBoard, shipsToBeCreated) {
 
     for (let i = 0; i < boards.length; i++) {
       try {
-        ship.orientation = generateShipOrientation(boards[i], ship);
+        ship.orientation = generateShipOrientation(boards[i], ship).orientation;
       } catch (error) {
         throw `there was no good placement for this ship ${JSON.stringify(
           ship
@@ -236,25 +237,62 @@ function generateShipPlacements(initialBoard, shipsToBeCreated) {
   return createdShips;
 }
 
+function generateShipBlocks(ship) {
+  return new Array(ship.size).fill(ship.symbol);
+}
+
+function placeShipOnBoard(materialisedBoard, ship) {
+  if (ship.orientation === SHIP_ORIENTATION.HORIZONTAL) {
+    // if its horizontal, you know that you just want the row replaced
+    const startingRow = materialisedBoard[ship.startY];
+    startingRow.splice(ship.startX, ship.size, ...generateShipBlocks(ship));
+    materialisedBoard[ship.startY] = startingRow;
+  } else {
+    // we assume its horizontal
+    for (let i = 0; i < ship.size; i++) {
+      materialisedBoard[ship.startY + i][ship.startX] = ship.symbol;
+    }
+  }
+  return materialisedBoard;
+}
+
 function generateBoard(initialBoard) {
-  const materialisedBoard = [];
-  const ships = generateShipPlacements(initialBoard, [
+  let materialisedBoard = [];
+  let ships = [];
+  // while (ships.length < 5) {
+  // try {
+  // this is the hack to get around the rare board placement
+  // just keep retrying until it figures itself out
+  ships = generateShipPlacements(initialBoard, [
     Ships.Carrier,
     Ships.Battleship,
     Ships.Cruiser,
     Ships.Submarine,
     Ships.Destroyer,
   ]);
+  // break;
+  // } catch (error) {
+  //   console.error(error);
+  // }
+  // }
 
   for (let x = 0; x < initialBoard.endX; x++) {
     let row = [];
     for (let y = 0; y < initialBoard.endY; y++) {
-      row.push(SQUARE_TYPES.FREE);
+      row.push(SQUARE_TYPES.FREE.id);
     }
     materialisedBoard.push(row);
   }
 
-  return { board: materialisedBoard, ships };
+  ships.forEach((ship) => {
+    placeShipOnBoard(materialisedBoard, ship);
+  });
+
+  // plot the ships on the board and then fill in the blanks
+  // with free squares
+
+  // seenBoard is the board that the player sees of the other player
+  return { board: materialisedBoard, ships, seenBoard: [] };
 }
 
 export {
@@ -264,4 +302,5 @@ export {
   placeAndSplitBoard,
   generateShipOrientation,
   generateBoard,
+  placeShipOnBoard,
 };

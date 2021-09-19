@@ -1,22 +1,30 @@
 export const SQUARE_TYPES = {
   OBSTACLE: {
     name: "OBSTACLE",
-    id: "-"
+    id: "-",
   },
   SHIP: {
     name: "SHIP",
-    id: "S"
+    id: "S",
   },
   FREE: {
     name: "FREE_SQUARE",
-    id: "O"
+    id: "O",
   },
   MISS: {
     name: "MISSED_SQUARE",
-    id: "X"
+    id: "X",
   },
   HIT: {
     name: "HIT",
-    id: "H"
-  }
+    id: "H",
+  },
+};
+
+export function generateShipSquare(ship) {
+  return {
+    id: ship.symbol,
+    name: ship.name,
+    reference: ship,
+  };
 }
