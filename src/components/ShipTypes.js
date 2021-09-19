@@ -4,6 +4,11 @@
 // import * as submarineImg from "../assets/imgs/submarine.png";
 // import * as destroyerImg from "../assets/imgs/destroyer.png";
 
+const SHIP_ORIENTATION = {
+  VERTICAL: "VERTICAL",
+  HORIZONTAL: "HORIZONTAL",
+};
+
 const SHIP_TYPES = {
   CARRIER: "CARRIER",
   BATTLESHIP: "BATTLESHIP",
@@ -50,4 +55,4 @@ const Ships = {
   },
 };
 
-export { Ships, SHIP_TYPES };
+export { Ships, SHIP_TYPES, SHIP_ORIENTATION };
