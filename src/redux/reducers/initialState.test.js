@@ -1,9 +1,15 @@
 import { BOARD_TYPES } from "../../components/BoardTypes";
 import { initialState } from "./initialState";
 
-it("should create 5 ships when initialised", () => {
+it("should create 5 ships for both players when initialised", () => {
+  // take note that there is a very rare chance that this can fail
+  // if the board generation just so happens to subsect the right amount
+  // of rectangles will fail to create the desired board state
   const state = initialState;
-  //   expect(state.ships.length).toBe(5);
+  const playerBoard = state.playerBoard;
+  expect(playerBoard.ships.length).toBe(5);
+  const enemyBoard = state.enemyBoard;
+  expect(enemyBoard.ships.length).toBe(5);
 });
 
 it("should always determine that someone goes first", () => {

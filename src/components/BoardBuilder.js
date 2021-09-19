@@ -1,6 +1,5 @@
 import { SQUARE_TYPES } from "./SquareTypes";
-import { Ships } from "./ShipTypes";
-import { SHIP_ORIENTATION } from "./ShipTypes";
+import { Ships, SHIP_ORIENTATION } from "./ShipTypes";
 
 // from MDN
 function getRandomInt(min, max) {
@@ -200,7 +199,11 @@ function generateShipPlacements(initialBoard, shipsToBeCreated) {
     let boardToRemove = undefined;
 
     for (let i = 0; i < boards.length; i++) {
-      ship.orientation = generateShipOrientation(boards[i], ship);
+      try {
+        ship.orientation = generateShipOrientation(boards[i], ship);
+      } catch (error) {
+        throw `there was no good placement for this ship ${ship}, here is the board state thus far, boards: ${boards}, createdShips: ${createdShips}`;
+      }
       const placements = placeAndSplitBoard(boards[i], ship);
       if (placements.splitBoards.length === 0) {
         // this is an indicator that this board cant support the ship
@@ -225,6 +228,8 @@ function generateShipPlacements(initialBoard, shipsToBeCreated) {
       throw `Could not find a board that can fit ${ship}`;
     }
   });
+
+  return createdShips;
 }
 
 function generateBoard(initialBoard) {
@@ -245,7 +250,7 @@ function generateBoard(initialBoard) {
     materialisedBoard.push(row);
   }
 
-  return materialisedBoard;
+  return { board: materialisedBoard, ships };
 }
 
 export {
