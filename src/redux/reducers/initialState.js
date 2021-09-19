@@ -33,7 +33,7 @@ function getRandomOrientation() {
 function generateRandom1dPosition(boardStart, boardEnd, shipSize) {
   const sizeDiff = Math.abs(shipSize - (boardEnd - boardStart));
   let maxValue = sizeDiff;
-  if ((boardStart === 0 && boardEnd === 0) || (boardEnd - boardStart) <= 0) {
+  if ((boardStart === 0 && boardEnd === 0) || boardEnd - boardStart <= 0) {
     maxValue = boardStart;
   }
 
@@ -199,40 +199,75 @@ function placeAndSplitBoard(initialBoard, shipToPlace) {
   };
 }
 
-function generateShipPlacements() {
-  const shipsToBeCreated = [
-    Ships.Carrier,
-    Ships.Battleship,
-    Ships.Cruiser,
-    Ships.Submarine,
-    Ships.Destroyer,
-  ];
+function generateShipPlacements(initialBoard, shipsToBeCreated) {
+  let boards = [initialBoard];
   const createdShips = [];
   // we should be iterating from largest ship to smallest
   // main reason is that its easier to fit a small ship if the big ships
   // have already been sorted out, we do risk space failure
   shipsToBeCreated.forEach((ship) => {
     // now we place the ships as best we can
+    // scan all the boards for the one that can hold the ship
+    let splitBoards = [];
+    let boardToRemove = undefined;
+
+    for (let i = 0; i < boards.length; i++) {
+      ship.orientation = generateShipOrientation(boards[i], ship);
+      const placements = placeAndSplitBoard(boards[i], ship);
+      if (placements.splitBoards.length === 0) {
+        // this is an indicator that this board cant support the ship
+        continue;
+      } else {
+        createdShips.push(placements.ship);
+        splitBoards = placements.splitBoards;
+        boardToRemove = i;
+        break;
+      }
+    }
+
+    if (boardToRemove !== undefined && splitBoards.length > 0) {
+      // this means that it was able to place the ship in a board
+      // remove the board, add the new boards
+      boards = boards.filter((_, index) => {
+        return index !== boardToRemove;
+      });
+      boards = boards.concat(splitBoards);
+    } else {
+      // the ship cant fit on ANY of the boards, mark this as bad and throw an error
+      throw `Could not find a board that can fit ${ship}`;
+    }
   });
 }
 
-function generateBoard() {
-  const board = [];
-  const ships = generateShipPlacements();
+function generateBoard(initialBoard) {
+  const materialisedBoard = [];
+  const ships = generateShipPlacements(initialBoard, [
+    Ships.Carrier,
+    Ships.Battleship,
+    Ships.Cruiser,
+    Ships.Submarine,
+    Ships.Destroyer,
+  ]);
 
-  for (let x = 0; x < INITIAL_BOARD_SIZE.width; x++) {
+  for (let x = 0; x < initialBoard.endX; x++) {
     let row = [];
-    for (let y = 0; y < INITIAL_BOARD_SIZE.height; y++) {
+    for (let y = 0; y < initialBoard.endY; y++) {
       row.push(SQUARE_TYPES.FREE);
     }
-    board.push(row);
+    materialisedBoard.push(row);
   }
 
-  return board;
+  return materialisedBoard;
 }
 
-initialState.enemyBoard = generateBoard();
-initialState.playerBoard = generateBoard();
+const initialBoard = {
+  startX: 0,
+  startY: 0,
+  endX: INITIAL_BOARD_SIZE.width,
+  endY: INITIAL_BOARD_SIZE.height,
+};
+initialState.enemyBoard = generateBoard(initialBoard);
+initialState.playerBoard = generateBoard(initialBoard);
 initialState.whoGoesFirst =
   Math.floor(Math.random() * 2) == 0 ? BOARD_TYPES.ENEMY : BOARD_TYPES.PLAYER;
 
