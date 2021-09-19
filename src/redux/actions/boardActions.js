@@ -1,18 +1,26 @@
 import * as types from "./actionTypes";
-import { BOARD_TYPES } from "../../components/BoardTypes";
-import { generateBoard } from "../../components/BoardBuilder";
-import { initialBoard } from "../reducers/initialState";
+import {
+  generateBoardState,
+  generateShipPlacements,
+} from "../../components/BoardBuilder";
+import { initialBoard, initialShips } from "../reducers/initialState";
 
 export function loadPlayerBoard() {
   return {
     type: types.BUILDING_PLAYER_BOARD,
-    playerBoard: generateBoard(initialBoard, BOARD_TYPES.PLAYER),
+    playerBoard: generateBoardState(
+      initialBoard,
+      generateShipPlacements(initialBoard, initialShips)
+    ),
   };
 }
 
 export function loadEnemyBoard() {
   return {
     type: types.BUILDING_ENEMY_BOARD,
-    enemyBoard: generateBoard(initialBoard, BOARD_TYPES.ENEMY),
+    enemyBoard: generateBoardState(
+      initialBoard,
+      generateShipPlacements(initialBoard, initialShips)
+    ),
   };
 }

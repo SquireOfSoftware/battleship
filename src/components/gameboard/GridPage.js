@@ -14,7 +14,7 @@ const GridPage = (props) => {
     props.actions.flipCoin();
     props.actions.loadPlayerBoard();
     props.actions.loadEnemyBoard();
-    console.log({props});
+    console.log({ props });
   }, []);
 
   function buildGrid() {
@@ -46,6 +46,8 @@ const GridPage = (props) => {
 
   const board = [];
   let boardStyle = {};
+
+  buildGrid();
 
   return (
     <div className="gameboard" style={boardStyle}>

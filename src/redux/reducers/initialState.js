@@ -1,4 +1,5 @@
 import { BOARD_TYPES } from "../../components/BoardTypes";
+import { Ships } from "../../components/ShipTypes";
 
 const INITIAL_BOARD_SIZE = {
   width: 25,
@@ -19,9 +20,12 @@ const initialState = {
   initialBoard,
 };
 
-// initialState.enemyBoard = generateBoard(initialBoard, BOARD_TYPES.ENEMY);
-// initialState.playerBoard = generateBoard(initialBoard, BOARD_TYPES.PLAYER);
-// initialState.whoGoesFirst =
-//   Math.floor(Math.random() * 2) == 0 ? BOARD_TYPES.ENEMY : BOARD_TYPES.PLAYER;
+const initialShips = [
+  Ships.Carrier,
+  Ships.Battleship,
+  Ships.Cruiser,
+  Ships.Submarine,
+  Ships.Destroyer,
+];
 
-export { initialState, INITIAL_BOARD_SIZE, initialBoard };
+export { initialState, INITIAL_BOARD_SIZE, initialBoard, initialShips };

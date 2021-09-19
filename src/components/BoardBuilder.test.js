@@ -6,8 +6,9 @@ import {
   placeAndSplitBoard,
   generateShipOrientation,
   placeShipOnBoard,
+  generateBoardState,
 } from "./BoardBuilder";
-import { SHIP_ORIENTATION } from "./ShipTypes";
+import { SHIP_ORIENTATION, Ships } from "./ShipTypes";
 import { SQUARE_TYPES } from "./SquareTypes";
 
 describe("random 1d generation tests", () => {
@@ -1069,4 +1070,83 @@ describe("placing a ship on a board", () => {
     // console.log(newBoard);
     expect(newBoard).toEqual(expectedBoard);
   });
+});
+
+describe("board initialisation tests", () => {
+  each([
+    [
+      {
+        startX: 0,
+        startY: 0,
+        endX: 4,
+        endY: 4,
+      },
+      [
+        {
+          ...Ships.Carrier,
+          orientation: SHIP_ORIENTATION.HORIZONTAL,
+          startX: 0,
+          startY: 1,
+          endX: 4,
+          endY: 1,
+        },
+      ],
+      [
+        ["O", "O", "O", "O", "O"],
+        ["A", "A", "A", "A", "A"],
+        ["O", "O", "O", "O", "O"],
+        ["O", "O", "O", "O", "O"],
+        ["O", "O", "O", "O", "O"],
+      ],
+    ],
+    [
+      {
+        startX: 0,
+        startY: 0,
+        endX: 4,
+        endY: 4,
+      },
+      [
+        {
+          ...Ships.Carrier,
+          orientation: SHIP_ORIENTATION.HORIZONTAL,
+          startX: 0,
+          startY: 1,
+          endX: 4,
+          endY: 1,
+        },
+        {
+          ...Ships.Destroyer,
+          orientation: SHIP_ORIENTATION.VERTICAL,
+          startX: 1,
+          startY: 2,
+          endX: 1,
+          endY: 3,
+        },
+        {
+          ...Ships.Submarine,
+          orientation: SHIP_ORIENTATION.VERTICAL,
+          startX: 3,
+          startY: 2,
+          endX: 3,
+          endY: 4,
+        },
+      ],
+      [
+        ["O", "O", "O", "O", "O"],
+        ["A", "A", "A", "A", "A"],
+        ["O", "D", "O", "S", "O"],
+        ["O", "D", "O", "S", "O"],
+        ["O", "O", "O", "S", "O"],
+      ],
+    ],
+  ]).it(
+    "generates a generic 5 by 5 board",
+    (initialBoard, initialShips, expectedFinalBoard) => {
+      const finalBoardState = generateBoardState(initialBoard, initialShips);
+      expect(finalBoardState).toBeDefined();
+      expect(finalBoardState.board).toEqual(expectedFinalBoard);
+      expect(finalBoardState.ships.length).toBe(initialShips.length);
+    }
+  );
 });

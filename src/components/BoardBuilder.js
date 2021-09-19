@@ -1,5 +1,5 @@
 import { SQUARE_TYPES } from "./SquareTypes";
-import { Ships, SHIP_ORIENTATION } from "./ShipTypes";
+import { SHIP_ORIENTATION } from "./ShipTypes";
 
 // from MDN
 function getRandomInt(min, max) {
@@ -256,31 +256,15 @@ function placeShipOnBoard(materialisedBoard, ship) {
   return materialisedBoard;
 }
 
-function generateBoard(initialBoard) {
+function generateBoardState(initialBoard, ships) {
   let materialisedBoard = [];
-  let ships = [];
-  ships = generateShipPlacements(initialBoard, [
-    Ships.Carrier,
-    Ships.Battleship,
-    Ships.Cruiser,
-    Ships.Submarine,
-    Ships.Destroyer,
-  ]);
-
-  for (let x = 0; x < initialBoard.endX; x++) {
-    let row = [];
-    for (let y = 0; y < initialBoard.endY; y++) {
-      row.push(SQUARE_TYPES.FREE.id);
-    }
-    materialisedBoard.push(row);
+  for (let y = 0; y <= initialBoard.endY; y++) {
+    materialisedBoard.push(Array(initialBoard.endX + 1).fill(SQUARE_TYPES.FREE.id));
   }
 
   ships.forEach((ship) => {
     placeShipOnBoard(materialisedBoard, ship);
   });
-
-  // plot the ships on the board and then fill in the blanks
-  // with free squares
 
   // seenBoard is the board that the player sees of the other player
   return { board: materialisedBoard, ships, seenBoard: [] };
@@ -292,6 +276,7 @@ export {
   splitBoard,
   placeAndSplitBoard,
   generateShipOrientation,
-  generateBoard,
+  generateBoardState,
   placeShipOnBoard,
+  generateShipPlacements,
 };
