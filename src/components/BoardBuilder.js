@@ -1,4 +1,4 @@
-import { SQUARE_TYPES, generateShipSquare } from "./SquareTypes";
+import { SQUARE_TYPES } from "./SquareTypes";
 import { Ships, SHIP_ORIENTATION } from "./ShipTypes";
 
 // from MDN
@@ -259,10 +259,6 @@ function placeShipOnBoard(materialisedBoard, ship) {
 function generateBoard(initialBoard) {
   let materialisedBoard = [];
   let ships = [];
-  // while (ships.length < 5) {
-  // try {
-  // this is the hack to get around the rare board placement
-  // just keep retrying until it figures itself out
   ships = generateShipPlacements(initialBoard, [
     Ships.Carrier,
     Ships.Battleship,
@@ -270,11 +266,6 @@ function generateBoard(initialBoard) {
     Ships.Submarine,
     Ships.Destroyer,
   ]);
-  // break;
-  // } catch (error) {
-  //   console.error(error);
-  // }
-  // }
 
   for (let x = 0; x < initialBoard.endX; x++) {
     let row = [];
