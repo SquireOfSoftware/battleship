@@ -4,27 +4,80 @@
   "homepage": "http://squireofsoftware.github.io/battleship",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
+    "file-loader": "^6.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "redux": "^4.1.0",
+    "redux-immutable-state-invariant": "^2.1.0",
     "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-react": "^7.25.2",
+    "babel-eslint": "^10.1.0",
+    "babel-preset-react-app": "^10.0.0",
+    "enzyme": "^3.11.0",
+    "gh-pages": "^3.0.0",
+    "jest-each": "^27.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest --watch",
+    "test:ci": "jest",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "babel": {
+    "presets": [
+      "babel-preset-react-app"
+    ]
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings"
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true,
+      "jest": true
+    },
+    "rules": {
+      "no-debugger": "off",
+      "no-console": "off",
+      "no-unused-vars": "warn",
+      "react/prop-types": "warn"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "root": true
   },
   "browserslist": {
     "production": [
@@ -37,8 +90,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "gh-pages": "^3.0.0"
   }
 }

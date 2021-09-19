@@ -1,33 +1,56 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux'
 
-class Square extends React.Component {
-    render() {
-        let value = this.props.value;
-        return (
-            <div 
-                className="default-square-element"
-                onClick={() => this.props.processClick(this.props.coords)}
-                onDrop={(event) => {
-                        this.props.processDrop(event);
-                        event.stopPropagation();
-                        event.preventDefault();
-                    }
-                }
-                onDragOver={(event) => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                }}
-            >
-                {value}
-            </div>
-        )
+const Square = (props) => {
+  const ships = useSelector(state => state.setupBoard.ships);
+  const obstacles = useSelector(state => state.setupBoard.obstacles);
+  const value = useSelector(state => state.setupBoard.board[props.coords.x][props.coords.y].id)
+
+  let getValue = (coords) => {
+    if (isAnObstacle(coords, obstacles)) {
+      return '-';
+    } else if (isAShip(coords, ships)) {
+      return 'S';
+    } else {
+      return 'O';
     }
-}
+  }
 
-Square.propTypes = {
-    processClick: PropTypes.func.isRequired,
-    coords: PropTypes.object
+  const isAnObstacle = (coords, obstacles) => {
+    if (obstacles !== undefined){
+      return obstacles.find(obstacle => {
+        return coords.x === obstacle.x && coords.y === obstacle.y
+      }) !== undefined;
+    }
+    return false;
+  }
+
+  const isAShip = (coords, ships) => {
+    if (ships !== undefined) {
+      return ships.find(ship => {
+        return coords.x === ship.x && coords.y === ship.y
+      }) !== undefined;
+    }
+  }
+
+  return (
+      <div
+          className="default-square-element"
+          onClick={() => props.processClick(props.coords)}
+          onDrop={(event) => {
+                  props.processDrop(event);
+                  event.stopPropagation();
+                  event.preventDefault();
+              }
+          }
+          onDragOver={(event) => {
+              event.stopPropagation();
+              event.preventDefault();
+          }}
+      >
+          {value}
+      </div>
+  )
 }
 
 export default Square;
