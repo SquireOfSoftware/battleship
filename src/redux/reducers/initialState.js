@@ -29,13 +29,19 @@ function getRandomOrientation() {
     : SHIP_ORIENTATION.VERTICAL;
 }
 
+// this does not support negatives
 function generateRandom1dPosition(boardStart, boardEnd, shipSize) {
-  const sizeDiff = shipSize - boardEnd;
+  const sizeDiff = Math.abs(shipSize - (boardEnd - boardStart));
+  let maxValue = sizeDiff;
+  if ((boardStart === 0 && boardEnd === 0) || (boardEnd - boardStart) <= 0) {
+    maxValue = boardStart;
+  }
+
   const randomPosition = getRandomInt(
     boardStart,
-    sizeDiff < boardStart ? boardStart : sizeDiff
+    maxValue < boardStart ? boardStart : maxValue
   );
-  return [randomPosition, randomPosition + shipSize];
+  return [randomPosition, randomPosition + shipSize - 1];
 }
 
 function splitBoard(board, ship) {
@@ -111,18 +117,16 @@ function splitBoard(board, ship) {
   return splitBoards;
 }
 
-// from https://stackoverflow.com/questions/4373741/how-can-i-randomly-place-several-non-colliding-rects
-function placeAndSplitBoard(initialBoard, shipToPlace) {
-  // assuming a board of some size x and y, we will place the ship randomly in the board meeting its conditions
-  // a board starts from a, b at the top left, to x, y in the bottom right
-  // a board has a schema of {startX, startY, endX, endY}
-  // we are also assuming the ship has a given length of a width of 1
-  // once we place the ship, we will split the board up into free squares and return that as the output
-  const boardWidth = initialBoard.endX - initialBoard.startX;
-  const boardHeight = initialBoard.endY - initialBoard.startY;
+function generateShipOrientation(initialBoard, shipToPlace) {
+  if (shipToPlace.size < 0) {
+    throw "We cannot fit a 0 or a negative sized ship";
+  }
 
-  const canFitWidth = boardWidth > shipToPlace.size;
-  const canFitHeight = boardHeight > shipToPlace.size;
+  const boardWidth = initialBoard.endX - initialBoard.startX + 1;
+  const boardHeight = initialBoard.endY - initialBoard.startY + 1;
+
+  const canFitWidth = boardWidth >= shipToPlace.size;
+  const canFitHeight = boardHeight >= shipToPlace.size;
   let orientation = undefined;
   if (canFitWidth && canFitHeight) {
     orientation = getRandomOrientation();
@@ -133,21 +137,66 @@ function placeAndSplitBoard(initialBoard, shipToPlace) {
   }
 
   if (orientation === undefined) {
-    return { error: "We cannot fit the ship on this board" };
+    throw "We cannot fit the ship on this board";
   }
+  return {
+    size: shipToPlace.size,
+    orientation,
+  };
+}
 
-  let shipCoord = {};
+// from https://stackoverflow.com/questions/4373741/how-can-i-randomly-place-several-non-colliding-rects
+function placeAndSplitBoard(initialBoard, shipToPlace) {
+  // assuming a board of some size x and y, we will place the ship randomly in the board meeting its conditions
+  // a board starts from a, b at the top left, to x, y in the bottom right
+  // a board has a schema of {startX, startY, endX, endY}
+  // a shipToPlace has a schema of {size, orientation}
+  // we are also assuming the ship has a given length of a width of 1
+  // once we place the ship, we will split the board up into free squares and return that as the output
+  // take note that we will ignore board merges for now
 
-  if (orientation === SHIP_ORIENTATION.HORIZONTAL) {
-    const xCoords = generateRandom1dPosition(
+  let shipCoords = {};
+  let splitBoards = [];
+
+  if (shipToPlace.orientation === SHIP_ORIENTATION.HORIZONTAL) {
+    const startCoords = generateRandom1dPosition(
       initialBoard.startX,
       initialBoard.endX,
       shipToPlace.size
     );
     const yCoord = getRandomInt(initialBoard.startY, initialBoard.endY);
+
+    shipCoords = {
+      startX: startCoords[0],
+      startY: yCoord,
+      endX: startCoords[1],
+      endY: yCoord,
+    };
   } else {
     // we can assume that it is VERTICAL
+    const startCoords = generateRandom1dPosition(
+      initialBoard.startY,
+      initialBoard.endY,
+      shipToPlace.size
+    );
+    const xCoord = getRandomInt(initialBoard.startX, initialBoard.endX);
+
+    shipCoords = {
+      startX: xCoord,
+      startY: startCoords[0],
+      endX: xCoord,
+      endY: startCoords[1],
+    };
   }
+
+  // we kind of assume that it can fit our ship
+  splitBoards = splitBoard(initialBoard, shipCoords);
+
+  return {
+    initialBoard: initialBoard,
+    ship: { ...shipToPlace, ...shipCoords },
+    splitBoards,
+  };
 }
 
 function generateShipPlacements() {
@@ -190,7 +239,10 @@ initialState.whoGoesFirst =
 export {
   initialState,
   INITIAL_BOARD_SIZE,
+  SHIP_ORIENTATION,
   getRandomInt,
   generateRandom1dPosition,
   splitBoard,
+  placeAndSplitBoard,
+  generateShipOrientation,
 };
