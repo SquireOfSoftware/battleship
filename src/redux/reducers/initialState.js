@@ -14,9 +14,9 @@ const initialBoard = {
 };
 
 const initialState = {
-  enemyBoard: [],
-  playerBoard: [],
-  whoGoesFirst: BOARD_TYPES.PLAYER,
+  enemyBoard: {},
+  playerBoard: {},
+  whoGoesFirst: null,
   initialBoard,
 };
 

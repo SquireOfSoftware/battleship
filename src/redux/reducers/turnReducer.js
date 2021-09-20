@@ -4,9 +4,7 @@ import * as types from "../actions/actionTypes";
 const turnReducer = (state = initialState.whoGoesFirst, action) => {
   switch (action.type) {
     case types.INITIAL_COIN_FLIP:
-      return {
-        whoGoesFirst: action.whoGoesFirst,
-      };
+      return action.whoGoesFirst;
     default:
       return state;
   }

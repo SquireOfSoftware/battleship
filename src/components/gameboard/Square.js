@@ -15,7 +15,7 @@ const Square = (props) => {
         event.preventDefault();
       }}
     >
-      Test
+      {props.value}
     </div>
   );
 };

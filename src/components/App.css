@@ -1,38 +1,39 @@
 .default-square-element {
-    background-color: rgb(53, 120, 221);
-    text-align: center;
+  background-color: rgb(53, 120, 221);
+  text-align: center;
 }
 
 .default-row-element {
-    display: flex
+  display: flex;
 }
 
 .title {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    color: greenyellow;
-    font-family: monospace;
-    font-size: 2em;
-    text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: greenyellow;
+  font-family: monospace;
+  font-size: 2em;
+  text-align: center;
 }
 
 .gameboard {
-    display: grid;
-    justify-content: center;
-    grid-gap: 1px;
-    padding-bottom: 30px;
+  display: grid;
+  justify-content: center;
+  grid-gap: 1px;
+  padding-bottom: 30px;
 }
 
-.turn-order, .setup-instructions {
-    background-color: yellow;
-    text-align: center;
-    font-family: monospace;
+.turn-order,
+.setup-instructions {
+  background-color: yellow;
+  text-align: center;
+  font-family: monospace;
 }
 
 .ship-checkbox {
-    background-color: aliceblue;
+  background-color: aliceblue;
 }
 
-html {
+/* html {
     background: black
-}
+} */

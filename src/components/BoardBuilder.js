@@ -124,7 +124,6 @@ function generateShipOrientation(initialBoard, shipToPlace) {
   }
 
   if (orientation === undefined) {
-    debugger;
     throw "We cannot fit the ship on this board";
   }
   return {
@@ -259,7 +258,9 @@ function placeShipOnBoard(materialisedBoard, ship) {
 function generateBoardState(initialBoard, ships) {
   let materialisedBoard = [];
   for (let y = 0; y <= initialBoard.endY; y++) {
-    materialisedBoard.push(Array(initialBoard.endX + 1).fill(SQUARE_TYPES.FREE.id));
+    materialisedBoard.push(
+      Array(initialBoard.endX + 1).fill(SQUARE_TYPES.FREE.id)
+    );
   }
 
   ships.forEach((ship) => {
@@ -267,7 +268,15 @@ function generateBoardState(initialBoard, ships) {
   });
 
   // seenBoard is the board that the player sees of the other player
-  return { board: materialisedBoard, ships, seenBoard: [] };
+  return {
+    board: materialisedBoard,
+    ships,
+    seenBoard: [],
+    dimensions: {
+      width: initialBoard.endX,
+      height: initialBoard.endY,
+    },
+  };
 }
 
 export {
