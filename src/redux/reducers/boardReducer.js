@@ -18,3 +18,16 @@ export function enemyBoardReducer(state = initialState.enemyBoard, action) {
       return state;
   }
 }
+
+export function attackReducer(state = initialState.seenEnemyBoard, action) {
+  switch (action.type) {
+    case types.PLAYER_ATTACK: {
+      console.log({ state, action });
+      let seenBoard = [...state];
+      seenBoard.push(action.coords);
+      return seenBoard;
+    }
+    default:
+      return state;
+  }
+}

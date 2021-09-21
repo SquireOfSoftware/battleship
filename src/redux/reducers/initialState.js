@@ -1,4 +1,3 @@
-import { BOARD_TYPES } from "../../components/BoardTypes";
 import { Ships } from "../../components/ShipTypes";
 
 const INITIAL_BOARD_SIZE = {
@@ -18,6 +17,7 @@ const initialState = {
   playerBoard: {},
   whoGoesFirst: null,
   initialBoard,
+  seenEnemyBoard: [],
 };
 
 const initialShips = [

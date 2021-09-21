@@ -1,102 +1,55 @@
 import React, { useEffect } from "react";
-import Square from "./Square";
 import { connect } from "react-redux";
 import decideWhoGoesFirst from "../../redux/actions/setupActions";
 import {
   loadEnemyBoard,
   loadPlayerBoard,
+  attackEnemy,
 } from "../../redux/actions/boardActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
-import Skeleton from "react-loading-skeleton";
+import { PlayerBoard, ViewableBoard } from "./Board";
 
-const GridPage = ({ playerBoard = {}, enemyBoard = {}, actions, ...props }) => {
+const GridPage = ({
+  playerBoard = {},
+  enemyBoard = {},
+  actions,
+  seenBoard = [],
+  ...props
+}) => {
   useEffect(() => {
     actions.flipCoin();
     actions.loadPlayerBoard();
     actions.loadEnemyBoard();
+    console.log({ props });
   }, []);
 
-  console.log({ playerBoard, enemyBoard, props });
+  console.log(seenBoard);
 
-  function buildGrid(boardStyle, board, boardState, dimensions) {
-    const boardWidth = dimensions.width;
-    const boardHeight = dimensions.height;
+  // actually we want to display the seen squares from the player
+  // and every click on the board maps to the enemy board to check if there is a hit
 
-    boardStyle["gridTemplateColumns"] = "repeat(" + boardWidth + ", 25px)";
-    boardStyle["gridTemplateRows"] = "repeat(" + boardHeight + ", 25px)";
-
-    for (let y = 0; y < boardHeight; y++) {
-      board[y] = [];
-      for (let x = 0; x < boardWidth; x++) {
-        let id = "x:" + x + ",y:" + y;
-        let coords = {
-          x,
-          y,
-        };
-
-        board[y][x] = (
-          <Square
-            key={id}
-            id={id}
-            coords={coords}
-            value={boardState[y][x]}
-            processClick={() =>
-              console.log(`hello im ${JSON.stringify(coords)}`)
-            }
-          />
-        );
-      }
+  function clickHandler(event) {
+    if (
+      seenBoard.some((seenEvent) => {
+        return seenEvent.x === event.x && seenEvent.y === event.y;
+      })
+    ) {
+      alert("you already attacked this square");
+    } else {
+      actions.attackEnemy(event);
     }
-    console.log({ board });
-  }
-
-  const playerGameBoard = [];
-  let playerBoardStyle = {};
-
-  if (playerBoard.board !== undefined) {
-    console.log("trying to build a board");
-    buildGrid(
-      playerBoardStyle,
-      playerGameBoard,
-      playerBoard.board,
-      playerBoard.dimensions
-    );
-  }
-
-  const enemyGameBoard = [];
-  let enemyGameBoardStyle = {};
-  if (enemyBoard.board !== undefined) {
-    buildGrid(
-      enemyGameBoardStyle,
-      enemyGameBoard,
-      enemyBoard.board,
-      enemyBoard.dimensions
-    );
   }
 
   return (
     <>
-      {enemyGameBoard.length === 0 ? (
-        <Skeleton height="100" width="100" />
-      ) : (
-        <>
-          <div>enemyBoard</div>
-          <div className="gameboard" style={enemyGameBoardStyle}>
-            {enemyGameBoard}
-          </div>
-        </>
-      )}
-      {playerGameBoard.length === 0 ? (
-        <Skeleton height="100" width="100" />
-      ) : (
-        <>
-          <div>Player board</div>
-          <div className="gameboard" style={playerBoardStyle}>
-            {playerGameBoard}
-          </div>
-        </>
-      )}
+      <ViewableBoard
+        boardState={enemyBoard}
+        boardTitle="Enemy Board"
+        onClick={clickHandler}
+        seenBoard={seenBoard}
+      />
+      <PlayerBoard boardState={playerBoard} boardTitle="Player Board" />
     </>
   );
 };
@@ -124,6 +77,7 @@ function mapStateToProps(state) {
     enemyBoard: state.enemyBoardState,
     playerBoard: state.playerBoardState,
     whoGoesFirst: state.turnDeterminer,
+    seenBoard: state.seenEnemyBoard,
   };
 }
 
@@ -133,6 +87,7 @@ function mapDispatchToProps(dispatch) {
       flipCoin: bindActionCreators(decideWhoGoesFirst, dispatch),
       loadPlayerBoard: bindActionCreators(loadPlayerBoard, dispatch),
       loadEnemyBoard: bindActionCreators(loadEnemyBoard, dispatch),
+      attackEnemy: bindActionCreators(attackEnemy, dispatch),
     },
   };
 }

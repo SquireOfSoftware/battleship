@@ -255,7 +255,7 @@ function placeShipOnBoard(materialisedBoard, ship) {
   return materialisedBoard;
 }
 
-function generateBoardState(initialBoard, ships) {
+function generateBoardState(initialBoard, ships, boardType) {
   let materialisedBoard = [];
   for (let y = 0; y <= initialBoard.endY; y++) {
     materialisedBoard.push(
@@ -276,6 +276,7 @@ function generateBoardState(initialBoard, ships) {
       width: initialBoard.endX,
       height: initialBoard.endY,
     },
+    boardType,
   };
 }
 

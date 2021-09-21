@@ -19,6 +19,10 @@ export const SQUARE_TYPES = {
     name: "HIT",
     id: "H",
   },
+  UNKNOWN: {
+    name: "UNKNOWN",
+    id: "~"
+  }
 };
 
 export function generateShipSquare(ship) {

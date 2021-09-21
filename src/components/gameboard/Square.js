@@ -1,23 +1,21 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const Square = (props) => {
   return (
     <div
       className="default-square-element"
       onClick={() => props.processClick(props.coords)}
-      onDrop={(event) => {
-        props.processDrop(event);
-        event.stopPropagation();
-        event.preventDefault();
-      }}
-      onDragOver={(event) => {
-        event.stopPropagation();
-        event.preventDefault();
-      }}
     >
       {props.value}
     </div>
   );
+};
+
+Square.PropTypes = {
+  processClick: PropTypes.func.isRequired,
+  coords: PropTypes.object.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 export default Square;
