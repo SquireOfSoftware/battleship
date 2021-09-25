@@ -5,26 +5,47 @@ import Square from "./Square";
 import PropTypes from "prop-types";
 import { SQUARE_TYPES } from "../SquareTypes";
 
+function buildBoard(
+  boardStyle,
+  gameBoard,
+  dimensions,
+  squareValueCallback,
+  generateSquareCallback
+) {
+  const boardWidth = dimensions.width;
+  const boardHeight = dimensions.height + 1;
+
+  boardStyle["gridTemplateColumns"] = "repeat(" + boardWidth + ", 25px)";
+  boardStyle["gridTemplateRows"] = "repeat(" + boardHeight + ", 25px)";
+
+  for (let y = 0; y < boardHeight; y++) {
+    gameBoard[y] = [];
+    for (let x = 0; x < boardWidth; x++) {
+      let coords = {
+        x,
+        y,
+      };
+
+      const squareValue = squareValueCallback(coords);
+
+      gameBoard[y][x] = generateSquareCallback(coords, squareValue);
+    }
+  }
+}
+
 function PlayerBoard({ boardState, boardTitle }) {
-  function buildGrid(boardStyle, gameBoard, boardState) {
-    const boardWidth = boardState.dimensions.width;
-    const boardHeight = boardState.dimensions.height;
+  const board = [];
+  let boardStyle = {};
 
-    boardStyle["gridTemplateColumns"] = "repeat(" + boardWidth + ", 25px)";
-    boardStyle["gridTemplateRows"] = "repeat(" + boardHeight + ", 25px)";
-
-    for (let y = 0; y < boardHeight; y++) {
-      gameBoard[y] = [];
-      for (let x = 0; x < boardWidth; x++) {
-        let id = "x:" + x + ",y:" + y;
-        let coords = {
-          x,
-          y,
-        };
-
-        const squareValue = boardState.board[y][x];
-
-        gameBoard[y][x] = (
+  if (boardState.board !== undefined) {
+    buildBoard(
+      boardStyle,
+      board,
+      boardState.dimensions,
+      (coords) => boardState.board[coords.y][coords.x],
+      (coords, squareValue) => {
+        const id = JSON.stringify(coords.x + "-" + coords.y);
+        return (
           <Square
             key={id}
             id={id}
@@ -36,14 +57,7 @@ function PlayerBoard({ boardState, boardTitle }) {
           />
         );
       }
-    }
-  }
-
-  const board = [];
-  let boardStyle = {};
-
-  if (boardState.board !== undefined) {
-    buildGrid(boardStyle, board, boardState);
+    );
   }
 
   return (
@@ -62,7 +76,7 @@ function PlayerBoard({ boardState, boardTitle }) {
   );
 }
 
-PlayerBoard.PropTypes = {
+PlayerBoard.propTypes = {
   boardState: PropTypes.shape({
     dimensions: PropTypes.object,
     board: PropTypes.array,
@@ -72,25 +86,20 @@ PlayerBoard.PropTypes = {
 };
 
 function ViewableBoard({ boardState, boardTitle, ...props }) {
-  function buildGrid(boardStyle, gameBoard, boardState) {
-    const boardWidth = boardState.dimensions.width;
-    const boardHeight = boardState.dimensions.height;
+  const board = [];
+  let boardStyle = {};
 
-    boardStyle["gridTemplateColumns"] = "repeat(" + boardWidth + ", 25px)";
-    boardStyle["gridTemplateRows"] = "repeat(" + boardHeight + ", 25px)";
-
-    for (let y = 0; y < boardHeight; y++) {
-      gameBoard[y] = [];
-      for (let x = 0; x < boardWidth; x++) {
-        let id = "x:" + x + ",y:" + y;
-        let coords = {
-          x,
-          y,
-        };
-
-        const squareValue = SQUARE_TYPES.UNKNOWN.id;
-
-        gameBoard[y][x] = (
+  if (boardState.board !== undefined) {
+    buildBoard(
+      boardStyle,
+      board,
+      boardState.dimensions,
+      (_) => {
+        return SQUARE_TYPES.UNKNOWN.id;
+      },
+      (coords, squareValue) => {
+        const id = JSON.stringify(coords.x + "-" + coords.y);
+        return (
           <Square
             key={id}
             id={id}
@@ -102,14 +111,7 @@ function ViewableBoard({ boardState, boardTitle, ...props }) {
           />
         );
       }
-    }
-  }
-
-  const board = [];
-  let boardStyle = {};
-
-  if (boardState.board !== undefined) {
-    buildGrid(boardStyle, board, boardState);
+    );
   }
 
   return (
@@ -134,7 +136,7 @@ ViewableBoard.propTypes = {
     board: PropTypes.array,
     boardType: PropTypes.string,
   }),
-  boardTitle: PropTypes.string.isRequired,
+  boardTitle: PropTypes.string,
 };
 
 export { PlayerBoard, ViewableBoard };

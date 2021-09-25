@@ -1,5 +1,5 @@
-import { SQUARE_TYPES } from "./SquareTypes";
 import { SHIP_ORIENTATION } from "./ShipTypes";
+import { BOARD_TYPES } from "./BoardTypes";
 
 // from MDN
 function getRandomInt(min, max) {
@@ -186,7 +186,7 @@ function placeAndSplitBoard(initialBoard, shipToPlace) {
   };
 }
 
-function generateShipPlacements(initialBoard, shipsToBeCreated) {
+function generateShipPlacements(initialBoard, shipsToBeCreated, boardType) {
   let boards = [initialBoard];
   const createdShips = [];
   // we should be iterating from largest ship to smallest
@@ -202,11 +202,14 @@ function generateShipPlacements(initialBoard, shipsToBeCreated) {
       try {
         ship.orientation = generateShipOrientation(boards[i], ship).orientation;
       } catch (error) {
-        throw `there was no good placement for this ship ${JSON.stringify(
-          ship
-        )}, here is the board state thus far, boards: ${JSON.stringify(
-          boards
-        )}, createdShips: ${JSON.stringify(createdShips)}`;
+        if (i == boards.length - 1) {
+          // we only want to throw an error if ALL the boards can't fit the ship
+          throw `there was no good placement for this ship ${JSON.stringify(
+            ship
+          )}, here is the board state thus far for ${boardType}, boards: ${JSON.stringify(
+            boards
+          )}, createdShips: ${JSON.stringify(createdShips)}`;
+        }
       }
       const placements = placeAndSplitBoard(boards[i], ship);
       if (placements.splitBoards.length === 0) {
@@ -258,9 +261,7 @@ function placeShipOnBoard(materialisedBoard, ship) {
 function generateBoardState(initialBoard, ships, boardType) {
   let materialisedBoard = [];
   for (let y = 0; y <= initialBoard.endY; y++) {
-    materialisedBoard.push(
-      Array(initialBoard.endX + 1).fill(SQUARE_TYPES.FREE.id)
-    );
+    materialisedBoard.push(Array(initialBoard.endX + 1));
   }
 
   ships.forEach((ship) => {
@@ -280,6 +281,22 @@ function generateBoardState(initialBoard, ships, boardType) {
   };
 }
 
+function generatePlayerBoardState(initialBoard, initialShips) {
+  return generateBoardState(
+    initialBoard,
+    generateShipPlacements(initialBoard, initialShips, BOARD_TYPES.PLAYER),
+    BOARD_TYPES.PLAYER
+  );
+}
+
+function generateEnemyBoardState(initialBoard, initialShips) {
+  return generateBoardState(
+    initialBoard,
+    generateShipPlacements(initialBoard, initialShips, BOARD_TYPES.ENEMY),
+    BOARD_TYPES.ENEMY
+  );
+}
+
 export {
   getRandomInt,
   generateRandom1dPosition,
@@ -289,4 +306,6 @@ export {
   generateBoardState,
   placeShipOnBoard,
   generateShipPlacements,
+  generateEnemyBoardState,
+  generatePlayerBoardState,
 };

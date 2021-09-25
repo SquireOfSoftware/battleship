@@ -5,6 +5,8 @@ export function playerBoardReducer(state = initialState.playerBoard, action) {
   switch (action.type) {
     case types.BUILDING_PLAYER_BOARD:
       return action.playerBoard;
+    case types.RESTART_BOARDS:
+      return action.playerBoard;
     default:
       return state;
   }
@@ -13,6 +15,8 @@ export function playerBoardReducer(state = initialState.playerBoard, action) {
 export function enemyBoardReducer(state = initialState.enemyBoard, action) {
   switch (action.type) {
     case types.BUILDING_ENEMY_BOARD:
+      return action.enemyBoard;
+    case types.RESTART_BOARDS:
       return action.enemyBoard;
     default:
       return state;

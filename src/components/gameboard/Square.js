@@ -12,10 +12,10 @@ const Square = (props) => {
   );
 };
 
-Square.PropTypes = {
+Square.propTypes = {
   processClick: PropTypes.func.isRequired,
   coords: PropTypes.object.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
 };
 
 export default Square;

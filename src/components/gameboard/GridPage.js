@@ -5,10 +5,12 @@ import {
   loadEnemyBoard,
   loadPlayerBoard,
   attackEnemy,
+  restartBoards,
 } from "../../redux/actions/boardActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import { PlayerBoard, ViewableBoard } from "./Board";
+import RestartBoardButton from "./RestartBoardButton";
 
 const GridPage = ({
   playerBoard = {},
@@ -41,6 +43,12 @@ const GridPage = ({
     }
   }
 
+  function reloadBoard(event) {
+    event.preventDefault();
+
+    actions.restartBoards();
+  }
+
   return (
     <>
       <ViewableBoard
@@ -50,6 +58,7 @@ const GridPage = ({
         seenBoard={seenBoard}
       />
       <PlayerBoard boardState={playerBoard} boardTitle="Player Board" />
+      <RestartBoardButton reloadCallback={reloadBoard} />
     </>
   );
 };
@@ -69,7 +78,9 @@ GridPage.propTypes = {
     flipCoin: PropTypes.func.isRequired,
     loadPlayerBoard: PropTypes.func.isRequired,
     loadEnemyBoard: PropTypes.func.isRequired,
+    restartBoards: PropTypes.func.isRequired,
   }),
+  seenBoard: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -88,6 +99,7 @@ function mapDispatchToProps(dispatch) {
       loadPlayerBoard: bindActionCreators(loadPlayerBoard, dispatch),
       loadEnemyBoard: bindActionCreators(loadEnemyBoard, dispatch),
       attackEnemy: bindActionCreators(attackEnemy, dispatch),
+      restartBoards: bindActionCreators(restartBoards, dispatch),
     },
   };
 }

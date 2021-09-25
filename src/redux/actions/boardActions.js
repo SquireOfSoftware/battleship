@@ -1,30 +1,25 @@
 import * as types from "./actionTypes";
 import {
-  generateBoardState,
-  generateShipPlacements,
+  generatePlayerBoardState,
+  generateEnemyBoardState,
 } from "../../components/BoardBuilder";
 import { initialBoard, initialShips } from "../reducers/initialState";
-import { BOARD_TYPES } from "../../components/BoardTypes";
 
 export function loadPlayerBoard() {
+  const playerBoard = generatePlayerBoardState(initialBoard, initialShips);
+
   return {
     type: types.BUILDING_PLAYER_BOARD,
-    playerBoard: generateBoardState(
-      initialBoard,
-      generateShipPlacements(initialBoard, initialShips),
-      BOARD_TYPES.PLAYER
-    ),
+    playerBoard,
   };
 }
 
 export function loadEnemyBoard() {
+  const enemyBoard = generateEnemyBoardState(initialBoard, initialShips);
+
   return {
     type: types.BUILDING_ENEMY_BOARD,
-    enemyBoard: generateBoardState(
-      initialBoard,
-      generateShipPlacements(initialBoard, initialShips),
-      BOARD_TYPES.ENEMY
-    ),
+    enemyBoard,
   };
 }
 
@@ -32,5 +27,14 @@ export function attackEnemy(coords) {
   return {
     type: types.PLAYER_ATTACK,
     coords,
+  };
+}
+
+export function restartBoards() {
+  console.log("Restarting the game board");
+  return {
+    type: types.RESTART_BOARDS,
+    enemyBoard: generateEnemyBoardState(initialBoard, initialShips),
+    playerBoard: generatePlayerBoardState(initialBoard, initialShips),
   };
 }
