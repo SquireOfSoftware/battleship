@@ -1,6 +1,20 @@
+.board-title {
+  text-align: center;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
 .default-square-element {
   background-color: rgb(53, 120, 221);
   text-align: center;
+  color: white;
+}
+
+.clickable:hover {
+  color: rgb(53, 120, 221);
+  background-color: white;
 }
 
 .default-row-element {
@@ -21,6 +35,10 @@
   justify-content: center;
   grid-gap: 1px;
   padding-bottom: 30px;
+}
+
+.restart-board-btn {
+  text-align: center;
 }
 
 .turn-order,

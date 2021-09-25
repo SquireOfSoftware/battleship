@@ -35,7 +35,10 @@ function buildBoard(
           id={id}
           coords={coords}
           value={squareValue}
-          processClick={() => clickCallback(coords)}
+          isClickable={clickCallback !== undefined}
+          processClick={() =>
+            clickCallback !== undefined ? clickCallback(coords) : {}
+          }
         />
       );
     }
@@ -61,7 +64,7 @@ function PlayerBoard({ boardState, boardTitle }) {
         <Skeleton height="100" width="100" />
       ) : (
         <>
-          <div>{boardTitle}</div>
+          <div className="board-title">{boardTitle}</div>
           <div className="gameboard" style={boardStyle}>
             {board}
           </div>
@@ -90,7 +93,11 @@ function ViewableBoard({ boardState, boardTitle, seenBoard, ...props }) {
       board,
       boardState.dimensions,
       (coords) => {
-        if (seenBoard.find((coord) => coord.x === coords.x && coord.y === coords.y) !== undefined) {
+        if (
+          seenBoard.find(
+            (coord) => coord.x === coords.x && coord.y === coords.y
+          ) !== undefined
+        ) {
           return boardState.board[coords.y][coords.x];
         } else {
           return SQUARE_TYPES.UNKNOWN.id;
@@ -108,7 +115,7 @@ function ViewableBoard({ boardState, boardTitle, seenBoard, ...props }) {
         <Skeleton height="100" width="100" />
       ) : (
         <>
-          <div>{boardTitle}</div>
+          <div className="board-title">{boardTitle}</div>
           <div className="gameboard" style={boardStyle}>
             {board}
           </div>
@@ -126,6 +133,7 @@ ViewableBoard.propTypes = {
   }),
   boardTitle: PropTypes.string,
   onClick: PropTypes.func.isRequired,
+  seenBoard: PropTypes.array,
 };
 
 export { PlayerBoard, ViewableBoard };
