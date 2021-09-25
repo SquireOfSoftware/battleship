@@ -26,20 +26,18 @@ const GridPage = ({
     console.log({ props });
   }, []);
 
-  console.log(seenBoard);
-
   // actually we want to display the seen squares from the player
   // and every click on the board maps to the enemy board to check if there is a hit
 
-  function clickHandler(event) {
+  function clickHandler(coord) {
     if (
       seenBoard.some((seenEvent) => {
-        return seenEvent.x === event.x && seenEvent.y === event.y;
+        return seenEvent.x === coord.x && seenEvent.y === coord.y;
       })
     ) {
       alert("you already attacked this square");
     } else {
-      actions.attackEnemy(event);
+      actions.attackEnemy(coord, enemyBoard.board, enemyBoard.ships);
     }
   }
 

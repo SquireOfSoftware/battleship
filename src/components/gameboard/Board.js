@@ -10,7 +10,7 @@ function buildBoard(
   gameBoard,
   dimensions,
   squareValueCallback,
-  generateSquareCallback
+  clickCallback
 ) {
   const boardWidth = dimensions.width;
   const boardHeight = dimensions.height + 1;
@@ -27,8 +27,17 @@ function buildBoard(
       };
 
       const squareValue = squareValueCallback(coords);
+      const id = JSON.stringify(coords.x + "-" + coords.y);
 
-      gameBoard[y][x] = generateSquareCallback(coords, squareValue);
+      gameBoard[y][x] = (
+        <Square
+          key={id}
+          id={id}
+          coords={coords}
+          value={squareValue}
+          processClick={() => clickCallback(coords)}
+        />
+      );
     }
   }
 }
@@ -42,21 +51,7 @@ function PlayerBoard({ boardState, boardTitle }) {
       boardStyle,
       board,
       boardState.dimensions,
-      (coords) => boardState.board[coords.y][coords.x],
-      (coords, squareValue) => {
-        const id = JSON.stringify(coords.x + "-" + coords.y);
-        return (
-          <Square
-            key={id}
-            id={id}
-            coords={coords}
-            value={squareValue}
-            processClick={() =>
-              console.log(`hello im ${JSON.stringify(coords)}`)
-            }
-          />
-        );
-      }
+      (coords) => boardState.board[coords.y][coords.x]
     );
   }
 
@@ -85,7 +80,7 @@ PlayerBoard.propTypes = {
   boardTitle: PropTypes.string.isRequired,
 };
 
-function ViewableBoard({ boardState, boardTitle, ...props }) {
+function ViewableBoard({ boardState, boardTitle, seenBoard, ...props }) {
   const board = [];
   let boardStyle = {};
 
@@ -94,22 +89,15 @@ function ViewableBoard({ boardState, boardTitle, ...props }) {
       boardStyle,
       board,
       boardState.dimensions,
-      (_) => {
-        return SQUARE_TYPES.UNKNOWN.id;
+      (coords) => {
+        if (seenBoard.find((coord) => coord.x === coords.x && coord.y === coords.y) !== undefined) {
+          return boardState.board[coords.y][coords.x];
+        } else {
+          return SQUARE_TYPES.UNKNOWN.id;
+        }
       },
-      (coords, squareValue) => {
-        const id = JSON.stringify(coords.x + "-" + coords.y);
-        return (
-          <Square
-            key={id}
-            id={id}
-            coords={coords}
-            value={squareValue}
-            processClick={(clickEvent) => {
-              props.onClick(clickEvent);
-            }}
-          />
-        );
+      (coords) => {
+        props.onClick(coords);
       }
     );
   }

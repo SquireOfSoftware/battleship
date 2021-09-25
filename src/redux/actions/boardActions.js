@@ -23,7 +23,16 @@ export function loadEnemyBoard() {
   };
 }
 
-export function attackEnemy(coords) {
+export function attackEnemy(coords, enemyBoard, enemyShips) {
+  // if (enemyBoard.board[coords.y][coords.x] !== undefined) {
+  //   // we are making the assumption that you cannot hit the same square twice
+  //   console.log(enemyBoard.board[coords.y][coords.x]);
+  //   if()
+  //   return {
+  //     type: types.ENEMY_SHIP_HIT
+  //   }
+  // }
+  // we want to check for a sink or a hit here
   return {
     type: types.PLAYER_ATTACK,
     coords,
