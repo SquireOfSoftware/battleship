@@ -137,6 +137,7 @@ ViewableBoard.propTypes = {
     boardType: PropTypes.string,
   }),
   boardTitle: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
 };
 
 export { PlayerBoard, ViewableBoard };

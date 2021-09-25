@@ -79,6 +79,7 @@ GridPage.propTypes = {
     loadPlayerBoard: PropTypes.func.isRequired,
     loadEnemyBoard: PropTypes.func.isRequired,
     restartBoards: PropTypes.func.isRequired,
+    attackEnemy: PropTypes.func.isRequired,
   }),
   seenBoard: PropTypes.array.isRequired,
 };
